@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wes White - Cloudformation vs Terraform</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&family=Libre+Baskerville:wght@400;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <a href="../index.html">Wesley White</a>
+            </div>
+    
+            <ul class = "nav">
+                <li>
+                    <a href="../index.html">Home</a>
+                </li>
+                <li>
+                    <a href="../CV.html">My CV</a>
+                </li>
+                <li>
+                    <a href="../portfolio.html">Portfolio</a>
+                </li>
+                <li>
+                    <a href="../contact.html">Contact</a>
+                </li>
+            </ul>
+    
+            <div class="github">
+                <a href="https://github.com/hexthelight">Github</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="back"><a href="../portfolio.html" class="back-btn">< Back</a>
+        </div>   
+        
+        <div id="cloudformation" class="box-element">
+            <div class="portfolio-heading">Comparing Cloudformation and Terraform</div>
+            <div class="sub-heading">The Goal</div>
+            <div class="content">
+                Infrastructure as Code is one of the biggest benefits of being in the cloud 
+                and understanding how it works is a vital part of being a DevOps engineer 
+                and Solutions Architect so it was definitely a skillset that I wanted to have 
+                in my repertoire.
+                <br>
+                <br>
+                As a result I wanted to create a basic template using both Cloudformation and
+                Terraform to demo the capabilities of the two platforms and identify which
+                I prefer and the use cases for each.
+                <br>
+                <br>
+                Both of my templates will create in the EU-West-3 region in Paris a new VPC,
+                all of the necessary networking including multiple public subnets across 2 AZ's,
+                and an Application Load Balancer which routes traffic to a target group which
+                is powered by an Auto Scaling Group containing a basic web server AMI.
+            </div>
+            <div class="sub-heading">Cloudformation</div>
+            <div class="content">
+                For my first template I used YAML as my initial language 
+                of choice mainly down to its readability. I have had experience with JSON in the
+                past when it comes to permissions in AWS such as IAM and S3 Bucket Policies but
+                I've always found it a bit too hard to read and fiddly with all of the brackets
+                flying around everywhere.
+                <br>
+                <br>
+                This is actually my first experience with YAML having run across it 2 or 3 times
+                in the past, and have actually found using it very straightforward. I never ran
+                into any breaking syntax issues, apart from when I may have used the wrong type,
+                where I entered the item as a string when it should have been entered as a list
+                even with only one item etc.
+                <br>
+                <br>
+                One of my test in the near future is to replicate this file in JSON so I can get
+                better acquainted with how that works especially as it has a much wider use case 
+                and would be the prominent solution when looking to automating these templates
+                further.
+            </div>
+            <div class="sub-heading">Terraform</div>
+            <div class="content">
+                My initial experience with Terraform was by following the basic "getting started 
+                with AWS" and so this template very much came as trial by fire from very little
+                knowledge on how Terraform worked in a more practical use case. I learnt this the 
+                hard way whilst doing more research and wound up on the Terraform registry, which
+                I noted allowed for a much more compact way of creating such as the VPC element
+                which also created the Internet Gateway, Route Tables, Subnets etc. It wasn't
+                until I tested an EC2 instance that I realised that what I was using were modules,
+                not resources!
+                
+                I kept these for the basic elements but used the generic resources for the Load
+                Balancer and Auto Scaling Group as the documentation felt easier to follow and
+                learn from the documentation.
+            </div>
+            <div class="sub-heading">Security Groups</div>
+            <div class="content">
+                Creating the security groups actually proved a bit of an unknown challenge. In my
+                first running of the Terraform template I initially did not include any egress
+                rules, purely ingress rules. This was due to my experience with the AWS Console
+                where the default position with the outbound rules is to automatically allow all 
+                outbound traffic, however with Terraform this is not the case. This led to a fault
+                once the Terraform stack was created that the instances would be created under the
+                ASG and you could connect to the web servers under the individual instances' public
+                IP address, however it would fail all of the ELB health checks due to a time out.
+                <br>
+                <br>
+                Initiall I played around with the health check settings to increase the interval to
+                prevent any time out but to no aveil. I then realised that if I could connect to the
+                instance directly, but the target group was not receiving any updates from said 
+                instances, then it must be due to something going wrong in the middle. I then checked
+                the security group to make sure that the EC2 instances were allowed to send a response 
+                and found that the egress rules were empty. Upon adding the egress rule on the security 
+                group template the target group sprung into life and everything worked from that point 
+                onwards!
+            </div>
+            <div class="sub-heading">Cloudformation vs Terraform</div>
+            <div class="content">
+                Throughout my learning, I found Terraform the better service to use from a creation
+                standpoint, mainly down to the fact that you have tools like validate and plan which 
+                provide that safety buffer that you know your code is going to apply successfully 
+                before you press go. The syntax felt a bit safer as well as it was common feedback
+                during my research and speaking with those more familiar that it is easier to make 
+                a mistake with YAML compared to JSON and so I wanted to make sure I wasn't inadvertently
+                making any fundamental flaws in my syntax.
+                <br>
+                <br>
+                However, I did find the Cloudformation documentation much clearer, and it was a bit
+                more difficult to jump down the proverbial rabbit hole compared to Terraform, even 
+                at the cost of not being able to do things like recording outputs like I've demo'd 
+                in my Terraform code.
+            </div>
+            <div class="sub-heading">Cost</div>
+            <div class="content">
+                The good thing about these templates is that I have been able to successfully test 
+                both Cloudformation and Terraform completely free of charge, as all of the resources 
+                that I have created fall under the free tier using t2.micro instances. This has given
+                me a safe place to demo the capabilities of the two services without incurring any cost,
+                even whilst troubleshooting such as with the Security Group issues mentioned above.
+            </div>
+            <a href="https://github.com/Hexthelight/AWS_IaC_Examples" class="btn-small">Check out the code here</a>
+        </div>
+    </main>
+
+    <footer>
+        <ul class="copyright">
+          <li>© Wesley White 2021</li>
+          <li>This webpage was built from scratch!</li>
+        </ul> 
+  
+        <ul class="contact-details">
+            <li>
+                Mobile: 07749 437466
+            </li>
+            <li>
+                <a href="mailto: wes.white@hexthelight.co.uk">Email: wes.white@hexthelight.co.uk</a>
+            </li>
+        </ul>
+  
+        <ul class="social-details">
+            <li>
+                <img src="./images/linkedin.jpg" alt="">
+                <a href="https://www.linkedin.com/in/wes-white-328453144">Connect with me</a>
+            </li>
+            <li>
+                <img src="./images/GitHub.png" alt="">
+                <a href="https://github.com/hexthelight">View my GitHub</a>
+            </li>
+        </ul>
+    </footer>
+</body>
+</html>
