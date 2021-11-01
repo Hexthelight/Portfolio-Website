@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wes White - Cloudformation vs Terraform</title>
+    <title>Wes White - CloudFormation vs Terraform</title>
     <link rel="stylesheet" href="../style.css">
     <link href="https://fonts.googleapis.com/css2?family=Lato&family=Libre+Baskerville:wght@400;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">    
 </head>
@@ -41,7 +41,7 @@
         </div>   
         
         <div id="cloudformation" class="box-element">
-            <div class="portfolio-heading">Comparing Cloudformation and Terraform</div>
+            <div class="portfolio-heading">Comparing CloudFormation and Terraform</div>
             <div class="sub-heading">The Goal</div>
             <div class="content">
                 Infrastructure as Code is one of the biggest benefits of being in the cloud 
@@ -50,17 +50,17 @@
                 in my repertoire.
                 <br>
                 <br>
-                As a result I wanted to create a basic template using both Cloudformation and
+                As a result I wanted to create a basic template using both CloudFormation and
                 Terraform to demo the capabilities of the two platforms and identify which
                 I prefer and the use cases for each.
                 <br>
                 <br>
-                Both of my templates will create in the EU-West-3 region in Paris a new VPC,
+                Both of my templates will create using the EU-West-3 region a new VPC, along with 
                 all of the necessary networking including multiple public subnets across 2 AZ's,
-                and an Application Load Balancer which routes traffic to a target group which
-                is powered by an Auto Scaling Group containing a basic web server AMI.
+                and an Application Load Balancer which routes traffic to a target group
+                powered by an Auto Scaling Group containing a basic web server AMI.
             </div>
-            <div class="sub-heading">Cloudformation</div>
+            <div class="sub-heading">CloudFormation</div>
             <div class="content">
                 For my first template I used YAML as my initial language 
                 of choice mainly down to its readability. I have had experience with JSON in the
@@ -76,7 +76,7 @@
                 even with only one item etc.
                 <br>
                 <br>
-                One of my test in the near future is to replicate this file in JSON so I can get
+                One of my tests in the near future is to replicate this file in JSON so I can get
                 better acquainted with how that works especially as it has a much wider use case 
                 and would be the prominent solution when looking to automating these templates
                 further.
@@ -109,7 +109,7 @@
                 <br>
                 <br>
                 Initiall I played around with the health check settings to increase the interval to
-                prevent any time out but to no aveil. I then realised that if I could connect to the
+                prevent any time out but to no avail. I then realised that if I could connect to the
                 instance directly, but the target group was not receiving any updates from said 
                 instances, then it must be due to something going wrong in the middle. I then checked
                 the security group to make sure that the EC2 instances were allowed to send a response 
@@ -117,7 +117,7 @@
                 group template the target group sprung into life and everything worked from that point 
                 onwards!
             </div>
-            <div class="sub-heading">Cloudformation vs Terraform</div>
+            <div class="sub-heading">CloudFormation vs Terraform</div>
             <div class="content">
                 Throughout my learning, I found Terraform the better service to use from a creation
                 standpoint, mainly down to the fact that you have tools like validate and plan which 
@@ -128,7 +128,7 @@
                 making any fundamental flaws in my syntax.
                 <br>
                 <br>
-                However, I did find the Cloudformation documentation much clearer, and it was a bit
+                However, I did find the CloudFormation documentation much clearer, and it was a bit
                 more difficult to jump down the proverbial rabbit hole compared to Terraform, even 
                 at the cost of not being able to do things like recording outputs like I've demo'd 
                 in my Terraform code.
@@ -136,7 +136,7 @@
             <div class="sub-heading">Cost</div>
             <div class="content">
                 The good thing about these templates is that I have been able to successfully test 
-                both Cloudformation and Terraform completely free of charge, as all of the resources 
+                both CloudFormation and Terraform completely free of charge, as all of the resources 
                 that I have created fall under the free tier using t2.micro instances. This has given
                 me a safe place to demo the capabilities of the two services without incurring any cost,
                 even whilst troubleshooting such as with the Security Group issues mentioned above.
