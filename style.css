@@ -471,11 +471,40 @@ footer ul {
     font-family: 'Libre Baskerville', sans-serif;
 }
 
-#cloudformation {
+#cloudformation, #s3-object {
     display: flex;
     flex-direction: column;
 }
 
-#cloudformation .btn-small {
+#cloudformation .btn-small, #s3-object .btn-small {
     align-self: flex-start; 
+}
+
+.supporting-image {
+    height: 25rem;
+    width: 40rem;
+    border: 4px #b39c4d solid;
+    box-shadow: 0px 1px 5px 1px #222;
+    margin: 2rem 0;
+}
+
+.supporting-image-wide {
+    height: 15rem;
+    width: 60rem;
+    border: 4px #b39c4d solid;
+    box-shadow: 0px 1px 5px 1px #222;
+    margin: 2rem 0;
+}
+
+.supporting-image-tall {
+    height: 35rem;
+    width: 40rem;
+    border: 4px #b39c4d solid;
+    box-shadow: 0px 1px 5px 1px #222;
+    margin: 2rem 0;
+}
+
+.content code {
+    font-size: 0.8rem;
+    font-family: monospace;
 }
