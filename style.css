@@ -471,12 +471,12 @@ footer ul {
     font-family: 'Libre Baskerville', sans-serif;
 }
 
-#cloudformation, #s3-object {
+#cloudformation, #s3-object, #diagrams {
     display: flex;
     flex-direction: column;
 }
 
-#cloudformation .btn-small, #s3-object .btn-small {
+#cloudformation .btn-small, #s3-object .btn-small, #diagrams .btn-small {
     align-self: flex-start; 
 }
 
