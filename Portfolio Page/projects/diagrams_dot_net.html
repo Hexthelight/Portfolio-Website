@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wes White - Self-hosting Diagrams.net on ECS</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&family=Libre+Baskerville:wght@400;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <a href="../index.html">Wesley White</a>
+            </div>
+    
+            <ul class = "nav">
+                <li>
+                    <a href="../index.html">Home</a>
+                </li>
+                <li>
+                    <a href="../CV.html">My CV</a>
+                </li>
+                <li>
+                    <a href="../portfolio.html">Portfolio</a>
+                </li>
+                <li>
+                    <a href="../contact.html">Contact</a>
+                </li>
+            </ul>
+    
+            <div class="github">
+                <a href="https://github.com/hexthelight">Github</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="back"><a href="../portfolio.html" class="back-btn">< Back</a>
+        </div>   
+
+        <div id="diagrams" class="box-element">
+            <div class="portfolio-heading">Self Hosting Diagrams.net on ECS</div>
+            <div class="sub-heading">The Goal</div>
+            <div class="content">
+                Having used Linux as my daily operating system for about 2 years now, I have
+                really gained an appreciation for open source software, especiall software that 
+                you can host yourself. This has led me on a seemingly never-ending search to 
+                find the best open source alternatives to my typical day-to-day applications. 
+                One such example is Diagrams.net, formerly Draw.io. 
+                <br>
+                <br>
+                As an aspiring Solutions Architect using an architecting and flow chart tool 
+                like Diagrams is an absolute must-have, especially as Diagrams has a massive 
+                section dedicated purely to the various AWS, GCP and Azure services amongst 
+                others, which makes architecting so much easier to design. I was super excited when I then
+                heard that Diagrams is in fact open source and self-hostable and I knew that I just
+                had to try and host it myself using AWS.
+            </div>
+            <div class="sub-heading">Why Self-host?</div>
+            <div class="content">
+                Self hosting provides a lot of benefits, the primary one being security. If you 
+                are self-hosting an application that stores or utilises sensitive or mission-critical 
+                data being able to self-host data allows greater control in terms of being able to limit
+                access to these application and being able to monitor the app's usage muhc better than if you were
+                using a closed-source SAAS application.
+                <br>
+                <br>
+                As Diagrams.net is a fairly straightforward application it doesn't really benefit from the privacy
+                and security that self-hosting provides, as it doesn't have any ability to store any of the 
+                created diagrams within the paplication, instead they are saved locally to the device that is accessing 
+                the application.
+                Instead the real benefit of self-hosting Diagrams.netis to keep the access within your AWS network, meaning
+                that you don't have to traverse the public internet to access your key applications.
+            </div>
+            <div class="sub-heading">Building with Docker Compose</div>
+            <div class="content">
+                Downloading the Diagrams.net self-hosting package gives you access to multiple docker files depending
+                on the platform you are hosting for such as nextcloud. This also contains a docker-compose file 
+                which can create a blueprint for the docker file in AWS including building the necessary infrastructure to allow 
+                for the proper working of the application.
+                <br>
+                <br>
+                Using Docker Compose it will automatically create the ECS tasks using Fargate, and attach it to a network 
+                load balancer with the necessary ports opened in the security group etc. meaning it is a really simple 
+                setup in that you just need to build the compose file and everything else is managed for you.
+                <br>
+                <br>
+                In order to get it working easily online I did also open up port 80 and 443 in the security group and 
+                network load balancer as teh app defaulted to port 8080 and 8443 respectively.
+            </div>
+            <div class="sub-heading">Self-signing certificates</div>
+            <div class="content">
+                Because the docker files already build in elements for self signing certificates 
+                via Let's Encrypt! it has caused some weird issues when trying to build access to
+                the page through my Route 53 domain using the certificates issued by ACM, in that 
+                the self-signing certificate seems to override the ACM certificate and therefore 
+                causes a few warning messages when accessing the webpage via HTTPS. This is something 
+                I haven't quite been able to resolve as of yet but want to look into further.
+            </div>
+            <div class="sub-heading">Scheduled Scaling using Lambda and Eventbridge</div>
+            <div class="content">
+                Because this setup isn't really able to make use of any free tier benefits I 
+                wanted to try and minimise costs by only having the tasks running only when I 
+                would be using it. As Fargate doesn't have a way of being able to do scheduled 
+                scaling events I was able ot replicate this functionality using a mixture of 
+                Lambda and EventBridge.
+                <br>
+                <br>
+                Using EventBridge I can set a Lambda function to trigger on a set schedule using a 
+                cron job to determine when these triggers should fire every day. This then trigger 
+                the Lambda function that will change the task count based on the JSON code supplied 
+                by the EventBridge rule.
+            </div>
+            <img src="../images/projects/diagrams.net/Lambda function.png" alt="" class="supporting-image">
+            <div class="content">
+                As a result, I have 2 EventBridge rules, one to "start" Diagrams every morning 
+                and one to "Stop" it every evening.
+            </div>
+            <img src="../images/projects/diagrams.net/List of Eventbridge rules.png" alt="" class="supporting-image">
+            <div class="content">
+                Each rule then triggers the Lambda function 3 times, once for each task that is part 
+                of the Diagrams ECS cluster.
+                <br>
+                <br>
+                This then provides a JSON file that identifies the task that we want to define 
+                and then whether the status is "start" or "stop" to change the task count accordingly.
+            </div>
+            <img src="../images/projects/diagrams.net/ECS Start JSON.png" alt="" class="supporting-image">
+            <div class="content">
+                By having a generic Lambda function and then passing in the relevant variables into the
+                JSON file it makes the functions much more flexible and easier to manage.
+            </div>
+            <div class="sub-heading">Cost</div>
+            <div class="content">
+                This project has actually worked out to be more expensive than I originally 
+                anticipated, due to the sort of resources that the docker compose file was 
+                utilizing. For example, by using a network load balancer as opposed to an application 
+                load balancer, I was not able to employ the free tier that is available 
+                just for ALB's, and so I was having to pay for the full amount of time that the NLB was running.
+                This is a similar situaiton with Fargate, in that I would need to pay essentially per 
+                hour that the tasks were running. The scheduled scaling did a good job of reducing my ECS 
+                costs however unfortunately that could not do anything for the network load balancer so the costs
+                did remain fairly high at around £40 per month.
+                <br>
+                <br>
+                This could be mitigated by moving to ECS hosted on EC2 using a free tier instance such as the T2.micro 
+                and employing an ALB however that would require much more hands on experience to set up which 
+                I am currently not too confident with as my experience with Docker is still fairly limited.
+                I hope to be able to improve this with further projects and perhaps come back and 
+                replicate this project with an emphasis on reducing cost as much as possible.
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <ul class="copyright">
+          <li>© Wesley White 2021</li>
+          <li>This webpage was built from scratch!</li>
+        </ul> 
+  
+        <ul class="contact-details">
+            <li>
+                Mobile: 07749 437466
+            </li>
+            <li>
+                <a href="mailto: wes.white@hexthelight.co.uk">Email: wes.white@hexthelight.co.uk</a>
+            </li>
+        </ul>
+  
+        <ul class="social-details">
+            <li>
+                <img src="./images/linkedin.jpg" alt="">
+                <a href="https://www.linkedin.com/in/wes-white-328453144">Connect with me</a>
+            </li>
+            <li>
+                <img src="./images/GitHub.png" alt="">
+                <a href="https://github.com/hexthelight">View my GitHub</a>
+            </li>
+        </ul>
+    </footer> 
+</body>
+</html>

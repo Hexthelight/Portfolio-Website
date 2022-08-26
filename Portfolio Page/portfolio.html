@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wesley White's Portfolio</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&family=Libre+Baskerville:wght@400;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <a href="./index.html">Wesley White</a>
+            </div>
+    
+            <ul class = "nav">
+                <li>
+                    <a href="./index.html">Home</a>
+                </li>
+                <li>
+                    <a href="./CV.html">My CV</a>
+                </li>
+                <li>
+                    <a href="">Portfolio</a>
+                </li>
+                <li>
+                    <a href="./contact.html">Contact</a>
+                </li>
+            </ul>
+    
+            <div class="github">
+                <a href="https://github.com/hexthelight">Github</a>
+            </div>
+        </div>
+    </header>    
+
+    <main>
+        <div class="headline">
+            <div class="banner">
+                <p>
+                    My Portfolio
+                </p>
+                <a href="./CV.html" class="btn">Check out my CV</a>
+            </div>
+        </div>
+
+        <div class="portfolio-box">
+
+            <div class="portfolio-box-element">
+                <div>
+                    <div class="heading">Building a DevOps Playground</div>
+                    <div class="content">A current work in progress, I am creating a 2 tiered
+                        application built on docker on ECS, utilising Terraform, Vault, and Ansible
+                        whilst following security best practices
+                    </div>
+                    <a href="./projects/DevOps_Playground.html" class="btn-small">View More</a>
+                </div>
+                <!-- <img src="./images/thumbnails/S3 and Lambda.png" alt=""> -->
+            </div>
+
+
+        <div class="portfolio-box-element">
+            <div>
+                <div class="heading">Object Management in S3 with Lambda</div>
+                <div class="content">In this project, I look at how you can use Lambda to 
+                    automate the folder structures of objects in S3 and gain first experience
+                    with the Python Boto3 kit
+                </div>
+                <a href="./projects/s3_object_management.html" class="btn-small">View More</a>
+            </div>
+            <img src="./images/thumbnails/S3 and Lambda.png" alt="">
+        </div>
+
+        <div class="portfolio-box-element">
+            <div>
+                <div class="heading">Comparing CloudFormation and Terraform</div>
+                <div class="content">In my first experiment with CloudFormation and Terraform,
+                I decide to test the two by creating a simple web server featuring a load
+                balancer and an auto scaling group
+                </div>
+                <a href="./projects/Cloudformation_vs_Terraform.html" class="btn-small">View more</a>
+            </div>
+            <img src="./images/thumbnails/Cloudformation vs Terraform.png" alt="">
+        </div>
+
+        <div class="portfolio-box-element">
+            <div>
+                <div class="heading">Self-hosting Diagrams.net on ECS</div>
+                <div class="content">
+                    In order to get to understand how docker works with ECS, I decided to self-host
+                    Diagrams.net using Fargate, go through the pros and cons and build in scheduling
+                    with EventBridge and Lambda
+                </div>
+                <a href="./projects/diagrams_dot_net.html" class="btn-small">View more</a>
+            </div>
+            <img src="./images/thumbnails/Diagrams.png" alt="">
+        </div>
+
+        <div class="portfolio-box-element">
+            <div>
+                <div class="heading">Hosting my website using S3 and CloudFront</div>
+                <div class="content">
+                    In my first big AWS project, I migrated my start page to S3, using CodeDeploy 
+                    with Github for seamless updates and CloudFront for security and high availability,
+                    all wrapped behind my custom domain through Route 53
+                </div>
+                <a href="./projects/Cloudfront.html" class="btn-small">View more</a>
+            </div>   
+            <img src="./images/thumbnails/Cloudfront.png" alt=""> 
+        </div>
+        </div>
+    </main>
+
+    <footer>
+        <ul class="copyright">
+          <li>© Wesley White 2021</li>
+          <li>This webpage was built from scratch!</li>
+        </ul> 
+  
+        <ul class="contact-details">
+            <li>
+                Mobile: 07749 437466
+            </li>
+            <li>
+                <a href="mailto: wes.white@hexthelight.co.uk">Email: wes.white@hexthelight.co.uk</a>
+            </li>
+        </ul>
+  
+        <ul class="social-details">
+            <li>
+                <img src="./images/linkedin.jpg" alt="">
+                <a href="https://www.linkedin.com/in/wes-white-328453144">Connect with me</a>
+            </li>
+            <li>
+                <img src="./images/GitHub.png" alt="">
+                <a href="https://github.com/hexthelight">View my GitHub</a>
+            </li>
+        </ul>
+    </footer>
+</body>
+</html>
