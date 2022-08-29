@@ -321,9 +321,9 @@ footer ul {
 }
 
 .qualification-content {
-    display: flex;
-    justify-content: space-evenly;
-    margin: 1.25rem;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    margin: 1.25rem auto;
 }
 
 @media screen and (max-width: 1200px) {
@@ -334,6 +334,7 @@ footer ul {
 
 .qualification-content img {
     max-width: 150px;
+    margin: 1.5rem;
 }
 
 .education-content {
