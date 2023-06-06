@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wes White - Automating object management on S3 with Lambda</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&family=Libre+Baskerville:wght@400;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <a href="../index.html">Wesley White</a>
+            </div>
+    
+            <ul class = "nav">
+                <li>
+                    <a href="../index.html">Home</a>
+                </li>
+                <li>
+                    <a href="../CV.html">My CV</a>
+                </li>
+                <li>
+                    <a href="../portfolio.html">Portfolio</a>
+                </li>
+                <li>
+                    <a href="../contact.html">Contact</a>
+                </li>
+            </ul>
+    
+            <div class="github">
+                <a href="https://github.com/hexthelight">Github</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="back"><a href="../portfolio.html" class="back-btn">< Back</a>
+        </div>  
+
+        <div id="s3-object" class="box-element">
+            <div class="portfolio-heading">Automating object management on S3 with Lambda</div>
+
+            <div class="sub-heading">The Goal</div>
+
+            <div class="content">
+                This project is my first major foray into Lambda and how it operates as I wanted to
+                learn more about Python and being able to interact and modify resources based on set
+                triggers.
+                <br>
+                <br>
+                I set out this project with a common use case: To be able to automate the management of
+                S3 objects by being able to automatically place them into the necessary folders and then,
+                depending on the object type, edit the object contents accordingly.
+                <br>
+                <br>
+                As this is a beginner project, I built the function to automatically sort the objects
+                by way of their file type, i.e. PDF's, JPG's and Word documents. I chose this because
+                it was easy information to take from the file as I had multiple ways to identify this information
+                using fairly common methods.
+                <br>
+                <br>
+                In order to make the sort work effectively, I created two buckets: a source bucket and a
+                destination bucket. The source bucket, as the name implies, purely exists for the user to
+                upload their objects. This then triggers the Lambda function which parses the information,
+                identifies the file type and then copies it into the destination bucket with the file type
+                added in to create a mock folder structure. 
+            </div>
+
+            <img src="../images/projects/S3 and Lambda/Object lifecycle.png" alt="" class="supporting-image">
+
+            <div class="sub-heading">The Benefits</div>
+
+            <div class="content">
+                Whilst my initial use case is relatively basic, it is very flexible. By splitting the objects
+                into the individual file types then allows for greater control when setting object tags and 
+                even lifecycle policies. For example you might want to move word documents into the Glacier
+                class after 3 months, but for PDF's it might be after 6 months to a year. By then giving each file type 
+                a consistent prefix it is then much easier to manage your lifecycle policies set on a per prefix 
+                basis. 
+                <br>
+                <br>
+                This code can also be a good base to expand further, for example building out the folders based
+                on the month and year uploaded, the tags attached to the object or even the size of the object.
+                This allows for some fantastic opportunities to keep your object management consistent and then
+                progress from there into further automation potentials (i.e. automatically resizing images or 
+                sending SNS topics based on spreadsheets that exceed a certain size).
+                <br>
+                <br>
+                We can also use this process build out restrictions on the sorts of objects that can be uploaded 
+                to the bucket, for example if you have a PDF document that is missing a certain tag or exceeds a 
+                certain size it can return an error and then either delete the source document or move to a third
+                bucket.
+                <br>
+                <br>
+                There are a number of different ways that you can manage your S3 usage, and Lambda triggers therefore
+                are a fantastic way of automating this process.
+            </div>
+
+            <div class="sub-heading">Learning about Boto3</div>
+
+            <div class="content">
+                As a self-confessed novice at Python the most I've been able to experience previously has been
+                working with lists and basic for loops, so I was familiar with the syntax but not much beyond that.
+                <br>
+                <br>
+                Seeing the demand that Python and Node.JS has on the market, having more real world experience with 
+                these languages felt like a no brainer to me, especially if it leads me to design and build better
+                architectures with automation at the very core.
+                <br>
+                <br>
+                Due to my lack of experience, this is the first time I've used Boto3, or even the import functionality
+                of Python in general. Getting to grips was fairly easy after a Python refresher (thanks freecodecamp!)
+                and as I started to read through real world examples I was able to understand fairly quickly what was 
+                happening with each line of code.
+                <br>
+                <br>
+                One thing I did struggle with was where to use <code>boto3.client('s3')</code> vs <code>boto3.resource('s3')</code>
+                as the resources I found online did tend to differ depending on the context. In the end I used <code>boto3.client</code>
+                as it felt easier to get to grips with the commands available such as <code>get_object</code> as it
+                ties in better in my head with using the right IAM and Bucket Policies, so it was easier to visualise 
+                what actions should be included in the policies.
+                <br>
+                <br>
+                During this exercise I kept the Boto3 guide close to hand however I did find this initially overwhelming 
+                due to the sheer amount of information which probably expects a higher level of understanding of the basics 
+                of the SDK and Python in general. I will definitely need to focus on this further as my experience increases.
+            </div>
+
+            <div class="sub-heading">The Code</div>
+
+            <div class="content">
+                In my code I have split it into a few sections: the global variables, the object variables, and then the output.
+                <br>
+                <br>
+                My global variables I have kept very basic, simply defining <code>s3 = boto3.client('s3')</code> as a short hand
+                and then calling the destination bucket. This could be improved using Secrets Manager at a later date again to automate 
+                any changes that need to be made at a later date as well as improving security. 
+                <br>
+                <br>
+                My object variables is calling and storing the bucket, object key as well as the object type that are generated 
+                from the trigger. Whilst I could hard code my source bucket as well, I decided to import this from the example that I 
+                used from the AWS webpage so that I'm not limited if I decided to add more source buckets at a later date.
+                <br>
+                <br>
+                The object key uses <code>urllib.parse</code> to pull from the nearly 40 lines of JSON that is sent in the trigger 
+                the name of the object, this could also be done using the <code>List-Objects-v2</code> resource however at the time of
+                creation as <code>urllib.parse</code> was already included I decided to keep that as is although the code should be very 
+                similar.
+                <br>
+                <br>
+                I then pulled through the object type using the <code>get_object</code> command, which pulls through the standard 
+                information that is gathered by AWS. This does make for some interesting folder names when, for example uploading a 
+                word document creates the folder as "vnd.openxmlformats-officedocument.wordprocessingml.document", as opposed to "docx".  
+            </div>
+
+            <img src="../images/projects/S3 and Lambda/folder structure.png" alt="" class="supporting-image-wide">
+
+            <div class="content">
+                When researching for this project, the first thing I found out when it comes to the Python SDK is that there is no "move"
+                function, instead you need to apply a copy function and then a delete function to remove the original document. This format
+                also applies to renaming documents. This works in my favour as the copy function also allows us to do the necessary renaming 
+                necessary for the folder structure to work properly.
+                <br>
+                <br>
+                Lastly, to ensure that the function exits correctly, I included a <code>return {'status_code': 200}</code> to show a correct 
+                execution of the function.
+            </div>
+
+            <img src="../images/projects/S3 and Lambda/PythonCode.png" alt="" class="supporting-image">
+
+            <div class="sub-heading">Working with Folders</div>
+
+            <div class="content">
+                One of my main concerns with this project initially would be the creation of the folders when uploading a new object, 
+                as I wasn't sure if you had to create the folder first before you're able to place the object. Doing some testing with 
+                a test bucket and some basic use of the copy command showed me that I in fact didn't need to worry about creating the folders, 
+                and as long as the folder naming is consistent, the files will follow suit. I was aware that this is because S3 doesn't have 
+                a folder structure per se, but instead builds the folder functionality into the name of the object, and then uses that 
+                to simulate a standard folder structure.
+                <br>
+                <br>
+                As mentioned above because we're pulling through the object type from the metadata it can come back with some wacky and wonderful
+                object types like the aforementioned word document. I could counter this by retrieving the object type based on the file extension 
+                at the end of the object, for example "testspreadsheet.xlsx" would have the file extension and therefore folder .xlsx. This could
+                be done by using the <code>.split()</code> resource in Python to store everything after the last full stop. The upside to this 
+                is that for those items who then do not have a file extension, we can build in their own folder called "Uncategorized".
+                <br>
+                <br>
+                This would make more sense for those who understand their file types better, but does mean that similar documents will be separated, 
+                such as .XLSX and .XLSM, whereas as it stands currently there is more chance of similar items being captured within the same folder
+                structure, so the use case depends on the specific items that are being stored as to which you should use.
+            </div>
+
+            <div class="sub-heading">Execution Roles and Bucket Policies</div>
+
+            <div class="content">
+                In order to maintain least privilege security on this project I set the necessary policies 
+                to ensure that the Lambda function has access to purely what it needs and the S3 buckets 
+                are allowing what is necessary for the function to run.
+                <br>
+                <br>
+                With the Lambda function I added to the standard role the abillity to list the objects on the source 
+                bucket and allowing Put operations on the destination bucket and Delete operations on the source bucket.
+                These policies have a direct correlation with the code that is run on the function to ensure that I am not 
+                providing more access than is strictly necessary.
+            </div>
+
+            <img src="../images/projects/S3 and Lambda/Lambda Role.png" alt="" class="supporting-image-tall">
+
+            <div class="content">
+                For the S3 bucket policies I reflected the policies that existed on the Lambda role to the respective bucket,
+                so the source bucket allowed GetObject and DeleteObject and the destination bucket allowed PutObject.
+            </div>
+
+            <img src="../images/projects/S3 and Lambda/Source Bucket Policy.png" alt="" class="supporting-image">
+
+            <img src="../images/projects/S3 and Lambda/Destination Bucket Policy.png" alt="" class="supporting-image">
+
+            <div class="content">
+                This was my first time really getting to grips with configuring the policies using JSON and, 
+                whilst it was not as easy to configure as YAML, it was not as difficult as I thought once I understood 
+                how the syntax works.
+                <br>
+                <br>
+                The good thing about configuring the policies in this way is that you can then completely lock down 
+                the destination bucket away from the source bucket and provide a more consistent experience for users.
+            </div>
+
+            <div class="sub-heading">The lambda_handler</div>
+
+            <div class="content">
+                as I started this project, my first instinct was to remove the template function that 
+                calls "Hello World!" and start from scratch in order to aid my learning and this is where 
+                I ran into my first issue, by doing so when it came round to creating my function I started off 
+                with my own name and calling my own inputs as the initial vision was fairly different to how it
+                resulted.
+                <br>
+                <br>
+                As I then started to run through my code I would then run into errors stating that there is an issue 
+                because the <code>lambda_handler</code> didn't exist. In my naivety I believed this was a configuration error
+                and that I was missing something in the settings based on my research online. It wasn't until I 
+                opened up another Lambda function that I was able to spot that the function itself was called lambda_handler, 
+                after amending the code accordingly to call the function <code>lambda_handler</code> and formatting it
+                correctly the code then ran correctly.
+                <br>
+                <br>
+                As I was researching, I did note that I could create multiple named functions and then call them within the 
+                lambda_handler function and that will work just fine, so that is a good point to bare in mind in future.
+            </div>
+
+            <div class="sub-heading">Cost</div>
+
+            <div class="content">
+                The great thing about using Lambda for these micro-operations is the fact that it uses so little 
+                resources that all of my testing was able to operate under the free tier, just paying for the S3 storage space. 
+                This has inspired confidence in myself to play around with Lambda more as it is so cost effective and so powerful 
+                at the same time that it is a must use service.
+            </div>
+
+            <div class="sub-heading">Takeaways</div>
+
+            <div class="content">
+                This project has given myself the most amount of learning out of all the projects I've completed so far, 
+                primarily because I had so many mini lessons that added up to a fantastic first experience with Python 
+                and my first real taster of Lambda in anger. This has inspired new confidence in me to explore Python further 
+                and use Lambda to really push my architectures further.
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer>
+        <ul class="copyright">
+          <li>© Wesley White 2021</li>
+          <li>This webpage was built from scratch!</li>
+        </ul> 
+  
+        <ul class="contact-details">
+            <li>
+                Mobile: 07749 437466
+            </li>
+            <li>
+                <a href="mailto: wes.white@hexthelight.co.uk">Email: wes.white@hexthelight.co.uk</a>
+            </li>
+        </ul>
+  
+        <ul class="social-details">
+            <li>
+                <img src="./images/linkedin.jpg" alt="">
+                <a href="https://www.linkedin.com/in/wes-white-328453144">Connect with me</a>
+            </li>
+            <li>
+                <img src="./images/GitHub.png" alt="">
+                <a href="https://github.com/hexthelight">View my GitHub</a>
+            </li>
+        </ul>
+    </footer> 
+</body>
+</html>
