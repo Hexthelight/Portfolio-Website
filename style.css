@@ -190,6 +190,13 @@ header{
     font-family: 'Libre Baskerville', sans-serif;
 }
 
+.sub-sub-heading {
+    color: #fff;
+    font-size: 1.25rem;
+    font-family: 'Libre Baskerville', sans-serif;
+    margin-top: 1rem;
+}
+
 .content {
     margin: 2rem 0;
 }
@@ -508,4 +515,9 @@ footer ul {
 .content code {
     font-size: 0.8rem;
     font-family: monospace;
+}
+
+.content a {
+    font-size: 1rem;
+    text-decoration: underline;
 }
