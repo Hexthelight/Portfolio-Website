@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wes White - Eventing and Messaging Showdown</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&family=Libre+Baskerville:wght@400;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <a href="../index.html">Wesley White</a>
+            </div>
+    
+            <ul class = "nav">
+                <li>
+                    <a href="../index.html">Home</a>
+                </li>
+                <li>
+                    <a href="../CV.html">My CV</a>
+                </li>
+                <li>
+                    <a href="../portfolio.html">Portfolio</a>
+                </li>
+                <li>
+                    <a href="../contact.html">Contact</a>
+                </li>
+            </ul>
+    
+            <div class="github">
+                <a href="https://github.com/hexthelight">Github</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="back"><a href="../portfolio.html" class="back-btn">< Back</a>
+        </div>   
+        
+        <div id="cloudformation" class="box-element">
+            <div class="portfolio-heading">Comparing AWS Eventing and Messaging Technologies</div>
+            <div class="sub-heading">Project Overview</div>
+            <div class="content">
+                The purpose of this project is to explore and create the various event streams and messaging queues offered by AWS to simulate a real life event-based architecture, having an input Lambda function publish to the various technologies, which then features data manipulation either by another lambda function or by Data Firehose, and the results then stored in an S3 bucket.
+            </div>
+            <img src="../images/projects/eventing and messaging/04 - Eventing and Messaging Showdown - Page 1.png" alt="">
+            <div class="sub-sub-heading">Project Outcome</div>
+            <div class="content">By the end of this project is to gain a basic understanding of how various eventing and messaging technologies work in AWS and understand the various use cases for each.</div>
+            <div class="sub-sub-heading">Project Outputs</div>
+            <div class="content">
+                <ul>
+                    <li>Terraform Scripts which contains all AWS resources provisioned</li>
+                    <li>Python scripts for all relevant lambda functions</li>
+                    <li>Notes on each service including what to use and when</li>
+                </ul>
+            </div>
+            <div class="sub-sub-heading">Out of Scope</div>
+            <div class="content">
+                <ul>
+                    <li>Configuring dead letter queues</li>
+                    <li>Apache self hosted kafka</li>
+                    <li>Kinesis Video Streams</li>
+                </ul>
+            </div>
+            <div class="sub-heading">Learning from the Project</div>
+            <div class="sub-sub-heading">Composition of Generator Function</div>
+            <div class="content">
+                The generator function is designed to return a simple json object with the following:
+            </div>
+            <img src="../images/projects/eventing and messaging/Screenshot_20230618_165543.png" alt="">
+            <div class="content">
+                I'm using the facts api from API ninjas to add a random fact just to add an extra element to the JSON.
+                <br>
+                <br>
+                There is a separate function for each route which I am then caling within the main <code>lambda_handler</code> function just to keep the code as clean as possible.
+            </div>
+            <div class="sub-sub-heading">
+                Using SSM
+            </div>
+            <div class="content">One of the interesting challenges in creating my generator function I found was referencing the endpoint for the SQS queue when that value would not be apparent until the TF files had been applied and created.
+                <br>
+                <br>
+                A neat solution that I found for this was to store the SQS queue as a value within the SSM Parameter Store, and then within my Lambda function, call SSM to retrieve the url. 
+                <br>
+                <br>
+                This does present an interesting architectural challenge in that that extra call to SSM will increase latency slightly and adds an extra dependency to the function to work, so this may not be the best idea in a production environment but is fine for this use case. An alternative would be to use either the <code>list_queues</code> or <code>get_queue_url</code> function to call SQS directly and retrieve the URL that way. I chose to use SSM for this instance to gain experience and understand where SSM Parameter Store could be utilised.
+            </div>
+            <div class="sub-sub-heading">Batching Events and Messages</div>
+            <div class="content">
+                Many of the services that I tested included the ability to batch messages in order to make effective use of function invocations. Whilst this was not something that I tested in this project it's useful to see how, for AWS estates that make heavy use of Lambda that it's a great way of being able to cut costs (just batching the messages so that each Lambda function processes 2 messages will effectively halve your costs...).
+                <br>
+                <br>
+                There is a fine balance to be struck when looking at reducing cost by batching as having a lambda function polling for too long could cause a performance bottleneck further down the chain. This can be measured as a KPI and potentially build in some kind of automation so that the amount of messages that Lambda processes per invocation increases with demand.
+            </div>
+            <div class="sub-sub-heading">Kinesis Firehose</div>
+            <div class="content">
+                Kinesis Data Firehose was an interesting one to learn about because from all of the marketing material it is described as an ETL service for streaming data however I did not appreciate that it uses Lambda as part of the transformation layer which requires setting up all the necessary permissions and resources.
+                <br>
+                <br>
+                The built-in blueprint however is really useful and I used that pretty much untouched for my data transformations, this is something I want to cover later to understand how far you can go with these transformation.
+            </div>
+            <div class="sub-sub-heading">How to configure an Event Backbone in AWS</div>
+            <div class="content">When I first learned of event-based architectures and event backbones my first assumption was that this was a methodology that would have been serviced by Kinesis, by its ability to stream data at massive scale, this was driven by my inexperience with Kinesis Data Shards which I believed were routing tunnels, rather than an ability to provide more throughput.
+                <br>
+                <br>
+                In the course of my research, I realised how powerful EventBridge is at routing events and messages which can then feed SQS topics, Lambda functions, even Kinesis streams. I originally didn't give EventBridge much credit as my only usage of it in the past was to trigger state changes in ECS based on cron jobs. EventBridge is definitely a service that I want to pay a closer attention to in the future as it has a lot of potential.</div>
+
+
+            <a href="https://github.com/Hexthelight/eventing-showdown" class="btn-small">Check out the code here</a>
+        </div>
+    </main>
+
+
+    <footer>
+        <ul class="copyright">
+          <li>© Wesley White 2023</li>
+          <li>This webpage was built from scratch!</li>
+        </ul> 
+  
+        <ul class="contact-details">
+            <li>
+                Mobile: 07749 437466
+            </li>
+            <li>
+                <a href="mailto: wes.white@hexthelight.co.uk">Email: wes.white@hexthelight.co.uk</a>
+            </li>
+        </ul>
+  
+        <ul class="social-details">
+            <li>
+                <img src="./images/linkedin.jpg" alt="">
+                <a href="https://www.linkedin.com/in/wes-white-328453144">Connect with me</a>
+            </li>
+            <li>
+                <img src="./images/GitHub.png" alt="">
+                <a href="https://github.com/hexthelight">View my GitHub</a>
+            </li>
+        </ul>
+    </footer> 
+</body>
+</html>

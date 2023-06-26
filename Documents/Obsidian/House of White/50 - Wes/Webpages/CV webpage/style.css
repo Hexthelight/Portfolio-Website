@@ -1,0 +1,523 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Lato', sans-serif;
+}
+
+body {
+    background-image: url(./images/background.png);
+    background-size: 40rem;
+    background-attachment: scroll;
+    color: #fff;
+    min-height: 100%;
+}
+
+a {
+    color: #fff;
+    font-size: 1.25rem;
+    text-decoration: none;
+}
+
+/* utilities */
+
+.btn {
+    font-family: 'Libre Baskerville', sans-serif;
+    font-size: 2rem;
+    margin-top: 2rem;
+    border: 3px #B39C4D solid;
+    display: inline-block;
+    padding: 0.5rem 0.8rem;
+    background: linear-gradient(120deg, #CCB872 0%, #B39C4d 75%);
+    box-shadow: 0px 1px 5px 1px #222;
+    cursor: pointer;
+}
+
+.btn-small {
+    font-family: 'Libre Baskerville', sans-serif;
+    font-size: 1rem;
+    margin-top: 2rem;
+    border: 3px #B39C4D solid;
+    display: inline-block;
+    padding: 0.5rem 0.8rem;
+    background: linear-gradient(120deg, #CCb872 0%, #B39C4D 75%);
+    box-shadow: 0px 1px 5px 1px #222;
+    cursor: pointer;
+}
+
+/* Header */
+
+header{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+}
+
+.header-content {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    justify-content: stretch;
+    position: relative;
+    background-clip: padding-box;
+    border: solid 2px transparent;
+    background: #465548;
+}
+
+.header-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    margin: -5px -2px;
+    border-radius: inherit;
+    background: linear-gradient(106.34deg, #CCB872 0%, #B39C4d 50%);
+    box-shadow: 3px 2px 5px #222;
+}
+
+.logo {
+    margin: 1rem 3rem;
+}
+
+.logo a {
+    text-decoration: none;
+}
+
+.nav {
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem;
+    /* border: 1px blue solid; */
+}
+
+.nav li {
+    list-style: none;
+}
+
+.nav li a {
+    text-decoration: none;
+}
+
+
+.github {
+    margin: 1rem 3rem;
+    text-align: end;
+    text-decoration: none;
+}
+
+.github a {
+    text-decoration: none;
+}
+
+/* Headline Content */
+
+.headline {
+    display: flex;
+    margin: 9rem 2rem;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.banner {
+    font-size: 3rem;
+    padding: 2rem;
+}
+
+.banner p {
+    font-family: 'Libre Baskerville', sans-serif;
+}
+
+.image_border {
+    height: 30rem;
+    padding: 1px 1px 3px 1px;
+    position: relative;
+    background: linear-gradient(106.34deg, #CCB872 0%, #B39C4d 50%);
+    box-shadow: 0px 1px 5px 1px #222;
+}
+
+
+.headshot {
+    height: 30rem;
+    padding: 4px 4px 5px 4px;
+}
+
+/* About us section */
+
+.box-element, .portfolio-box-element {
+    background-color: #465548;
+    padding: 2rem 2rem 1rem 2rem;
+    position: relative;
+    border: transparent 4px solid;
+    margin: 2rem 12rem;
+}
+
+.box-element::before, .portfolio-box-element::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    margin: -7px -7px;
+    border-radius: inherit;
+    background: linear-gradient(106.34deg, #CCB872 0%, #B39C4d 50%);
+    box-shadow: 0px 1px 5px 1px #222;
+}
+
+.heading {
+    color: #fff;
+    font-size: 2rem;
+    display: inline-block;
+    align-self: flex-start;
+    background: linear-gradient(180deg, rgba(255,255,255,0) 60%, #b39c4d 60%, #b39c4d 90%, rgba(255,255,255,0) 90%);
+    padding: 0px 3px;
+    font-family: 'Libre Baskerville', sans-serif;
+}
+
+.sub-heading {
+    color: #fff;
+    font-size: 1.5rem;
+    display: inline-block;
+    background: linear-gradient(180deg, rgba(255,255,255,0) 60%, #b39c4d 60%, #b39c4d 90%, rgba(255,255,255,0) 90%);
+    padding: 0px 3px;
+    align-self: flex-start;
+    margin-top: 2rem;
+    font-family: 'Libre Baskerville', sans-serif;
+}
+
+.sub-sub-heading {
+    color: #fff;
+    font-size: 1.25rem;
+    font-family: 'Libre Baskerville', sans-serif;
+    margin-top: 1rem;
+}
+
+.content {
+    margin: 2rem 0;
+}
+
+/* Portfolio */
+
+#portfolio {
+    margin: 6rem 12rem;
+}
+
+#portfolio .heading {
+    margin: 0rem 2rem;
+}
+
+#portfolio .btn-small {
+    margin: 2rem 2rem;
+}
+
+.portfolio-content {
+    margin: 5rem 0rem;
+    display: flex;
+    justify-content: space-between;
+}
+@media screen and (max-width: 1200px) {
+    #portfolio {
+        margin: 6rem 6rem;
+    }
+
+    #portfolio .heading {
+        margin: 0 8rem;
+    }
+
+    #portfolio .cta {
+        margin: 2rem 7rem;
+    }
+
+    .portfolio-content {
+        margin: 2.5rem 0;
+    }
+}
+
+.portfolio-item {
+    border: 3px #B39C4D solid;
+    background-color: #465548;
+    box-shadow: 0px 1px 5px 1px #222;
+    width: 20rem;
+    height: 25rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1rem 2rem 0 2rem;
+    font-size: 1.25rem;
+}
+
+.portfolio-item img {
+    max-width: 150px;
+}
+
+/* Footer */
+
+footer {
+    height: 8rem;
+    width: auto;
+    margin-top: 5rem;
+    background: #454b50;
+    border-top: 3px solid #B39C4D;
+    padding: 2rem 5rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+footer ul {
+    width: 20rem;
+}
+
+.copyright li {
+    list-style: none;
+    padding-bottom: 1rem;
+}
+
+.contact-details {
+    text-align: center;
+}
+
+.contact-details li {
+    list-style: none;
+    padding-bottom: 1rem;
+}
+
+.contact-details li a {
+    font-size: 1rem;
+}
+
+.social-details {
+    text-align: right;
+}
+
+.social-details li {
+    list-style: none;
+    padding-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+
+.social-details li a {
+    font-size: 1rem;
+}
+
+.social-details li img {
+    height: 1rem;
+    padding: 0 5px;
+}
+
+/* CV Page */
+
+#cv {
+    margin-top: 10rem;
+    margin-bottom: 7rem;
+    display: flex;
+    flex-direction: column;
+}
+
+#cv .content {
+    margin-top: 1.25rem;
+    margin-bottom: 0;
+}
+
+.qualification-content {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    margin: 1.25rem auto;
+}
+
+@media screen and (max-width: 1200px) {
+    .qualification-content img {
+        width: 20%;
+    }
+}
+
+.qualification-content img {
+    max-width: 150px;
+    margin: 1.5rem;
+}
+
+.education-content {
+    margin-top: 0.75rem;
+}
+
+.education-content ul{
+    display: grid;
+    grid-template-columns: auto auto auto;
+    margin-top: 0.5rem;
+}
+
+.education-content ul li {
+    list-style: none;
+}
+
+.education-content ul li:nth-child(3) {
+    text-align: end;
+}
+
+.bullet-points {
+    margin-top: 0.75rem;
+}
+
+.bullet-points ul li {
+    margin-top: 0.5rem;
+}
+
+.bullet-points ul li a {
+    font-size: 1rem;
+    text-decoration: underline;
+}
+
+.career-heading {
+    margin-top: 0.75rem;
+}
+
+.career-heading ul {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-top: 1.25rem;
+}
+
+.career-heading ul li {
+    list-style: none;
+    font-weight: bold;
+    font-family: 'Libre Baskerville', sans-serif;
+}
+
+.career-heading ul li:nth-child(2) {
+    text-align: center;
+}
+
+.career-heading ul li:nth-child(3) {
+    text-align: end;
+}
+
+.references {
+    margin-top: 2.5rem;
+    font-family: 'Libre Baskerville', sans-serif;
+}
+
+#cv .btn-small {
+    align-self: flex-start;
+}
+
+/* Portfolio page */
+
+.portfolio-box-element {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1300px;
+    margin-bottom: 5rem;
+    position: relative;
+}
+
+@media screen and (min-width: 3000px) {
+    .portfolio-box {
+        display: grid;
+        grid-template-columns: auto auto;
+    }
+}
+
+.portfolio-box-element img {
+    width: 150px;
+    height: 150px;
+}
+
+.portfolio-box-element .heading {
+    font-size: 1.3rem;
+}
+
+.portfolio-box-element .content {
+    padding-right: 3rem;
+}
+
+/* Contact page */
+
+.contact-content p, .contact-content a {
+    font-size: 1.5rem;
+}
+
+.contact-icons img {
+    width: 50px;
+    margin-top: 5rem;
+    margin-right: 2.5rem;
+}
+
+.contact-footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+/* Projects */
+
+.back {
+    margin: 7rem 5rem;
+}
+
+.back-btn {
+    background: linear-gradient(180deg, rgba(255,255,255,0) 70%, #b39c4d 70%, #b39c4d 95%, rgba(255,255,255,0) 95%);
+    /* border: 10px 10px; */
+}
+
+.portfolio-heading {
+    color: #fff;
+    font-size: 1.75rem;
+    display: inline-block;
+    align-self: flex-start;
+    background: linear-gradient(180deg, rgba(255,255,255,0) 60%, #b39c4d 60%, #b39c4d 90%, rgba(255,255,255,0) 90%);
+    padding: 0px 3px;
+    font-family: 'Libre Baskerville', sans-serif;
+}
+
+#cloudformation, #s3-object, #diagrams {
+    display: flex;
+    flex-direction: column;
+}
+
+#cloudformation .btn-small, #s3-object .btn-small, #diagrams .btn-small {
+    align-self: flex-start; 
+}
+
+.supporting-image {
+    height: 25rem;
+    width: 40rem;
+    border: 4px #b39c4d solid;
+    box-shadow: 0px 1px 5px 1px #222;
+    margin: 2rem 0;
+}
+
+.supporting-image-wide {
+    height: 15rem;
+    width: 60rem;
+    border: 4px #b39c4d solid;
+    box-shadow: 0px 1px 5px 1px #222;
+    margin: 2rem 0;
+}
+
+.supporting-image-tall {
+    height: 35rem;
+    width: 40rem;
+    border: 4px #b39c4d solid;
+    box-shadow: 0px 1px 5px 1px #222;
+    margin: 2rem 0;
+}
+
+.content code {
+    font-size: 0.8rem;
+    font-family: monospace;
+}
+
+.content a {
+    font-size: 1rem;
+    text-decoration: underline;
+}

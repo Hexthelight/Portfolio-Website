@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wes White - API Management</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&family=Libre+Baskerville:wght@400;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <a href="../index.html">Wesley White</a>
+            </div>
+    
+            <ul class = "nav">
+                <li>
+                    <a href="../index.html">Home</a>
+                </li>
+                <li>
+                    <a href="../CV.html">My CV</a>
+                </li>
+                <li>
+                    <a href="../portfolio.html">Portfolio</a>
+                </li>
+                <li>
+                    <a href="../contact.html">Contact</a>
+                </li>
+            </ul>
+    
+            <div class="github">
+                <a href="https://github.com/hexthelight">Github</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="back"><a href="../portfolio.html" class="back-btn">< Back</a>
+        </div>   
+        
+        <div id="cloudformation" class="box-element">
+            <div class="portfolio-heading">Creating a serverless API</div>
+            <div class="sub-heading">Project Overview</div>
+            <div class="content">
+                The purpose of this project is to create a serverless API that can allow for basic CRUD operations, using lambda functions written in Python which calls to a basic DynamoDB table, and restricting access to API through the use of an API key.
+            </div>
+            <img src="../images/projects/api_management/03 - API Management - Page 1.png" alt="" class="">
+            <div class="sub-heading">Project Outcome</div>
+            <div class="content">
+                By the end of the project I should gain a decent understanding on how to configure API gateway, including the ability to create a RESTful API including documentation on Swagger.
+            </div>
+            <div class="sub-heading">Project Outputs</div>
+            <div class="content">
+                <ul>
+                    <li>Terraform Scripts which contains all AWS resources provisioned</li>
+                    <li>Python script for all relevant lambda functions</li>
+                    <li>Swagger YAML configuration file</li>
+                    <li>Notes on API Gateway best practices and architectural considerations</li>
+                </ul>
+            </div>
+            <div class="sub-heading">Out of Scope for this project</div>
+            <div class="content">
+                <ul>
+                    <li>Updating existing items using the API - examples covered by GET, PUT and DELETE</li>
+                    <li>Using Vault/KMS secrets to protect Cognito credentials - that is coming in another project!</li>
+                    <li>Utilising full RESTful practices</li>
+                </ul>
+            </div>
+            <div class="sub-heading">Project Description</div>
+            <div class="content">
+                For all of these one-off projects, everything is encapsulated in a brand new AWS account which is then destroyed upon project completion, I would then access the account in Terraform using the <code>OrganizationAccountAccessRole</code> in order to prevent any extra configuration in the AWS CLI.
+                <br>
+                <br>
+                In this project, I spun up an API Gateway instance that, based on the call received by curl, route the call to a lambda function that would interface with DynamoDB and return the results back to the user.
+                <br>
+                <br>
+                In order to add a layer of protection to the API, I configured a Cognito user pool to generate a JWT token upon a successful authentication call, which is passed in the header of the API call.
+                <br>
+                <br>
+                I then have Cloudwatch Logs enabled for debugging purposes.
+            </div>
+            <div class="sub-sub-heading">Pricing</div>
+            <div class="content">This project did not cost me anything to create and test as all my usage fell under the free tier and was not intensive enough to breach any thresholds.</div>
+            <div class="sub-heading">Take-aways from the project</div>
+            <div class="sub-sub-heading">Creating accounts and provisioning resources in Terraform</div>
+            <div class="content">
+                It currently doesn't seem to be possible to create a new AWS account and provision the necessary resources in the same Terraform file, meaning you need to create the AWS account first in one folder, and then in the main terraform configuration, pass in the following:
+            </div>
+            <img src="../images/projects/api_management/Screenshot_20230612_112424.png" alt="" srcset="">
+            <div class="content">
+                The account id can be easily found by logging into the aws console and getting the account id from there, although I imagine you could probably log the output of the account creation to a file and have the <code>new_account_id</code> reference that file. For ease, I have not done that here.
+            </div>
+            <div class="sub-sub-heading">Packaging Lambda Functions</div>
+            <div class="content">
+                Lambda functions have to be zipped! So that means when creating a lambda function and you're referencing a separate file, you need to create a data source similar to the following:
+            </div>
+            <img src="../images/projects/api_management/Screenshot_20230612_113210.png" alt="">
+            <div class="content">
+                In the lambda resource as well, you need to define the handler, which is the name of the main function that will be run by Lambda once triggered.
+            </div>
+            <div class="sub-sub-heading">Get Items</div>
+            <div class="content">Within DynamoDB, there are 2 methods of retrieving multiple items from a table, <code>Query</code> and <code>Scan</code>. For the sake of this project and to keep in line with the AWS guide that I'm using as a benchmark, my <code>GET /items</code> call will just run a scan command with no filters and return everything, as the dataset will be low enough not to matter.  </div>
+            <div class="sub-sub-heading">General Terraform Cleanliness</div>
+            <div class="content">
+                As it's been a while since I've used Terraform, my primary focus has been on getting functional and working code to get the relevant resources provisioned, even if that means that I'm not entirely following Terraform best practices, or using the full capabilities of Terraform. This means that for the likes of API Gateway there is a lot of the same resources being reused. It wasn't a primary goal to create amazing Terraform code, but to create a packaged environment that contains everything needed.
+            </div>
+            <div class="sub-sub-heading">
+                Understanding the API Requests - Authentication request to Cognito
+            </div>
+            <div class="content">
+                In order to create the authentication request with Cognito I used the below request which I saw whilst following Andrew Tarry's guide on integrating Cognito with API Gateway:
+            </div>
+            <img src="../images/projects/api_management/Screenshot_20230612_113808.png" alt="">
+            <div class="content">
+                The Client ID was originally a bit of a challenge to identify until I found it under the "user pool app client" section of the user pool and then I was able to find the necessary attribute that could be outputted in my terraform script.
+                <br>
+                <br>
+                This then provided a massive long authentication token of which I would only need the authenticator token which I would then pass into my API gateway request, which consisted of the following: 
+            </div>
+            <img src="../images/projects/api_management/Screenshot_20230612_113929.png" alt="">
+            <div class="sub-sub-heading">
+                Understanding the API Requests - Lambda's Cryptic Error Messages
+            </div>
+            <div class="content">
+                Around 50% of my time spent on this project was on debugging how my request was being sent from API Gateway to Lambda due to employing the Lambda Proxy integration, as that impacted whether the <code>json.loads()</code> or <code>json.dumps()</code> method would be applicable as originally I was getting error messages for both. After much research I realised that I didn't include the <code>content-type:application/json</code> header and therefore the json file wasn't being formatted in the correct way for Lambda to be able to deal with.
+                <br>
+                <br>
+                Once that was fixed, and I was able to get <code>json.loads()</code> returning properly where I could then focus on the next issue being configuring the return response properly.
+                <br>
+                <br>
+                This was a big learning exercise as the error messages being provided by Python / Lambda weren't particularly helpful, and in the case of my purposely including an object in the request that didn't hold a 'name' value, the error message that I received was simply "The Lambda function returned the following error: 'name'" which was originally quite complexing. This may have been down to how I configured the python script however it's really brought home how important graceful error handling is!
+            </div>
+            <div class="sub-sub-heading">Lambda vs Lambda Proxy Integration - Wrapping my head round the difference</div>
+            <div class="content">
+                When I was researching possible solutions for these error messages, a common theme that came up time and time again was the type of integration I was using, as it had a big impact into how to format your Lamdba function accordingly. As I was using this <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-dynamo-db.html">AWS Guide</a> as a baseline I was using the Lambda Proxy integration, which meant I had to be more considered in how my Lambda function was formatted, especially for the return response below.
+            </div>
+            <div class="sub-sub-heading">Lambda vs Lambda Proxy - Formatting the Return Response</div>
+            <div class="content">
+                As a result of using the Lambda Proxy integration, I learned that it then has certain ramifications for how the return response should be configured to correctly pass back into API Gateway to be returned to the client, with the layout being as follows:
+            </div>
+            <img src="../images/projects/api_management/Screenshot_20230612_115639.png" alt="">
+            <div class="content">
+                In prior Lambda functions I was used to <code>return</code> being relatively free to include whatever you feel is a necessary response for the user, and so to start off with I was just passing in a <code>{"statusCode":200}</code> value, before realising that API Gateway expected the above response format from Lambda. After some minor research to find the solution I was able to correct it and my code was correctly working. 
+            </div>
+            <div class="sub-sub-heading">
+                Configuring Log Groups
+            </div>
+            <div class="content">
+                Once I deployed my lambda functions I quickly learned the most important aspect element that I missed was a way of being able to view the results of any API calls beyond <code>{'Message':'Internal Server Error'}</code>. After some digging I found a tutorial on how to enable cloudwatch log groups which would enable me to actually view the error messages being generated by Lambda.
+                <br>
+                <br>
+                Where I ran into a bit of an issue was working out what values I wanted to view from the logs, in the end I was able to get what I needed from the integration error and event ID values so I used those, but I appreciate a lot more is available that would be better suited for a more standard use case and not just my basic bug fixing.
+            </div>
+            <div class="sub-sub-heading">Lambda and DynamoDB</div>
+            <div class="content">
+                The smoothest part of the process which actually didn't require any debugging was the calls that Lambda were making to DynamoDB, and that all worked a treat just following the DynamoDB resource SDK's.
+            </div>
+            <a href="https://github.com/Hexthelight/API_Management" class="btn-small">Check out the code here</a>
+        </div>
+    </main>
+
+
+    <footer>
+        <ul class="copyright">
+          <li>© Wesley White 2023</li>
+          <li>This webpage was built from scratch!</li>
+        </ul> 
+  
+        <ul class="contact-details">
+            <li>
+                Mobile: 07749 437466
+            </li>
+            <li>
+                <a href="mailto: wes.white@hexthelight.co.uk">Email: wes.white@hexthelight.co.uk</a>
+            </li>
+        </ul>
+  
+        <ul class="social-details">
+            <li>
+                <img src="./images/linkedin.jpg" alt="">
+                <a href="https://www.linkedin.com/in/wes-white-328453144">Connect with me</a>
+            </li>
+            <li>
+                <img src="./images/GitHub.png" alt="">
+                <a href="https://github.com/hexthelight">View my GitHub</a>
+            </li>
+        </ul>
+    </footer> 
+</body>
+</html>
