@@ -68,6 +68,22 @@
                     <li>Utilising full RESTful practices</li>
                 </ul>
             </div>
+            <div class="sub-heading">Project Description</div>
+            <div class="content">
+                For all of these one-off projects, everything is encapsulated in a brand new AWS account which is then destroyed upon project completion, I would then access the account in Terraform using the <code>OrganizationAccountAccessRole</code> in order to prevent any extra configuration in the AWS CLI.
+                <br>
+                <br>
+                In this project, I spun up an API Gateway instance that, based on the call received by curl, route the call to a lambda function that would interface with DynamoDB and return the results back to the user.
+                <br>
+                <br>
+                In order to add a layer of protection to the API, I configured a Cognito user pool to generate a JWT token upon a successful authentication call, which is passed in the header of the API call.
+                <br>
+                <br>
+                I then have Cloudwatch Logs enabled for debugging purposes.
+            </div>
+            <div class="sub-sub-heading">Pricing</div>
+            <div class="content">This project did not cost me anything to create and test as all my usage fell under the free tier and was not intensive enough to breach any thresholds.</div>
+            
             <div class="sub-heading">Take-aways from the project</div>
             <div class="sub-sub-heading">Creating accounts and provisioning resources in Terraform</div>
             <div class="content">
